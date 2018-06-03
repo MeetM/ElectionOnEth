@@ -18,6 +18,10 @@ contract Election {
 
 	mapping(address => bool) public voters;
 
+	event votedEvent (
+        uint indexed _candidateId
+    );
+
 	function Election () public {
 		addCandidate("Candidate 1");
 		addCandidate("Candidate 2");
@@ -32,9 +36,12 @@ contract Election {
 		require(!voters[msg.sender]);
 
 		require(_candidateId > 0 && _candidateId <= candidatesCount);
-		
+
 		voters[msg.sender] = true;
 
 		candidates[_candidateId].votecount++;
+
+		// trigger voted event
+        votedEvent(_candidateId);
 	}
 }
